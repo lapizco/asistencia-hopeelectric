@@ -111,6 +111,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .toast.show{opacity:1}
 .num{text-align:right;font-variant-numeric:tabular-nums}
 .empty{padding:28px;text-align:center;color:var(--text2);font-size:13px}
+
+/* ── RESPONSIVE ───────────────────────── */
+@media(max-width:768px){
+  .content{padding:10px 12px}
+  .topbar{padding:8px 12px;flex-wrap:wrap;gap:6px}
+  .topbar h1{font-size:13px}
+  .topbar-left{gap:6px;flex-wrap:wrap}
+  .period-pill{display:none}
+  .cards-row{grid-template-columns:repeat(2,1fr);gap:8px}
+  .mcard .val{font-size:16px}
+  .phead{padding:8px 12px;flex-wrap:wrap;gap:6px}
+  .phead-r{flex-wrap:wrap;gap:6px;width:100%}
+  .phead-r .btn{flex:1;justify-content:center;font-size:11px}
+  /* Tabla asistencia — scroll horizontal */
+  .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .table-scroll::after{content:'← desliza →';display:block;text-align:center;font-size:10px;color:var(--text3);padding:4px;background:var(--bg3)}
+  .asis-table{min-width:600px;font-size:11px}
+  .asis-table thead th{padding:5px 6px;font-size:10px}
+  .asis-table td{padding:4px 5px}
+  .dia-btn{width:26px;height:26px;font-size:10px}
+  .hora-input{width:52px;font-size:10px}
+  /* Modal — pantalla completa */
+  .overlay{padding:0;align-items:flex-end}
+  .modal{width:100%;max-width:100%;border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:16px;max-height:90vh;overflow-y:auto;margin:0}
+  .fg{grid-template-columns:1fr}
+  .btn-row{flex-wrap:wrap}
+  .btn-row .btn{flex:1;justify-content:center}
+  #btn-enviar{width:100%;justify-content:center;margin-top:4px}
+}
+@media(max-width:480px){
+  .cards-row{grid-template-columns:1fr 1fr}
+  .topbar h1{font-size:12px}
+  .obra-pill{font-size:11px;padding:2px 7px}
+}
 </style>
 </head>
 <body>
@@ -143,10 +177,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
+  <div class="tabs-enc" style="display:flex;background:var(--bg2);border-bottom:0.5px solid var(--border);padding:0 16px;overflow-x:auto">
+    <div class="tab-enc active" onclick="swEnc('semana')" id="tenc-semana" style="padding:9px 14px;font-size:13px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;white-space:nowrap">Semana actual</div>
+    <div class="tab-enc" onclick="swEnc('historial')" id="tenc-historial" style="padding:9px 14px;font-size:13px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;white-space:nowrap">Historial</div>
+  </div>
+
   <div class="content">
     <div id="banner-area"></div>
     <div class="cards-row" id="resumen-cards"></div>
 
+    <!-- SEMANA ACTUAL -->
+    <div id="enc-semana">
     <div class="panel">
       <div class="phead">
         <h2 id="panel-title">Asistencia de la semana</h2>
@@ -155,7 +196,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <button class="btn btn-primary" id="btn-enviar" onclick="confirmarEnvio()" style="background:var(--green);border-color:var(--green)">Enviar asistencia</button>
         </div>
       </div>
-      <div style="overflow-x:auto">
+      <div class="table-scroll">
         <table class="asis-table">
           <thead>
             <tr>
@@ -168,6 +209,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
               <th>Sábado</th>
               <th class="num" style="min-width:60px">Faltas</th>
               <th class="num" style="min-width:80px">Desc. retardo</th>
+              <th style="min-width:120px">Nota</th>
             </tr>
           </thead>
           <tbody id="asis-tbody"></tbody>
@@ -184,6 +226,35 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 </div>
+
+    </div><!-- /enc-semana -->
+
+    <!-- HISTORIAL -->
+    <div id="enc-historial" style="display:none">
+      <div class="panel">
+        <div class="phead"><h2>Mis semanas enviadas</h2></div>
+        <div class="table-scroll">
+        <table>
+          <thead><tr><th>Semana</th><th>Del</th><th>Al</th><th class="num">Trabajadores</th><th class="num">Faltas</th><th class="num">Desc. retardos</th><th></th></tr></thead>
+          <tbody id="hist-enc-tbody"></tbody>
+        </table>
+        </div>
+      </div>
+      <div id="hist-enc-detail" style="display:none">
+        <div class="panel">
+          <div class="phead"><h2 id="hist-enc-detail-title">Detalle</h2><button class="btn btn-sm" onclick="$('hist-enc-detail').style.display='none'">Cerrar detalle</button></div>
+          <div class="table-scroll">
+          <table>
+            <thead><tr><th>Trabajador</th><th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th class="num">Faltas</th><th class="num">Desc.</th><th>Nota</th></tr></thead>
+            <tbody id="hist-enc-detail-tbody"></tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+    </div><!-- /enc-historial -->
+
+  </div><!-- /content -->
+</div><!-- /app -->
 
 <!-- MODAL NUEVO EMPLEADO -->
 <div class="overlay" id="overlay-emp">
@@ -308,7 +379,7 @@ async function initApp() {
   if (semanaActual) {
     const { data: asistRows } = await db.from('asistencia_semanal').select('*').eq('semana_id', semanaActual.id);
     (asistRows || []).forEach(row => {
-      asistencias[row.empleado_id] = row;
+      asistencias[row.empleado_id] = {...row};
       if (row.enviada) yaEnviada = true;
     });
   }
@@ -434,6 +505,10 @@ function renderApp() {
       ${celdas}
       <td class="num" style="font-weight:500;color:${t.faltas>0?'var(--red)':'var(--text2)'}">${t.faltas>0?t.faltas:'—'}</td>
       <td class="num" style="color:${t.descRetardo>0?'var(--amber)':'var(--text2)'}">${t.descRetardo>0?fmt(t.descRetardo):'—'}</td>
+      <td>${!yaEnviada
+        ? `<input type="text" placeholder="Nota opcional..." value="${a.nota||''}" style="width:100%;font-size:11px;padding:3px 6px;border:0.5px solid var(--border);border-radius:4px;background:var(--bg3);color:var(--text)" onchange="setNota(${emp.id},this.value)">`
+        : `<span style="font-size:11px;color:var(--text2)">${a.nota||'—'}</span>`
+      }</td>
     </tr>`;
   }).join('');
 
@@ -457,6 +532,12 @@ function setHora(empId, dia, hora) {
   a[dia + '_hora'] = hora;
   autoSave(empId);
   renderApp();
+}
+
+function setNota(empId, nota) {
+  const a = getAsistencia(empId);
+  a.nota = nota;
+  autoSave(empId);
 }
 
 // ─── AUTOGUARDADO ─────────────────────────────────────────────────────────────
@@ -485,6 +566,7 @@ async function guardarAsistencia(empId) {
     total_faltas: t.faltas,
     descuento_retardo: t.descRetardo,
     descuento_faltas: t.descFaltas,
+    nota: a.nota||null,
     enviada: false,
     updated_at: new Date().toISOString()
   };
@@ -555,6 +637,68 @@ async function guardarNuevoEmp() {
     showToast(nombre + ' agregado');
     renderApp();
   }
+}
+
+// ─── PESTAÑAS ENCARGADO ───────────────────────────────────────────────────────
+function swEnc(t) {
+  ['semana','historial'].forEach(n => {
+    $('enc-'+n).style.display = n===t ? 'block' : 'none';
+    const tabEl = $('tenc-'+n);
+    if (tabEl) {
+      tabEl.style.color = n===t ? 'var(--text)' : 'var(--text2)';
+      tabEl.style.borderBottomColor = n===t ? 'var(--text)' : 'transparent';
+      tabEl.style.fontWeight = n===t ? '500' : 'normal';
+    }
+  });
+  if (t==='historial') renderHistorialEnc();
+}
+
+async function renderHistorialEnc() {
+  const { data: semsEnc } = await db.from('asistencia_semanal')
+    .select('*, semanas_nomina(desde, hasta)')
+    .eq('encargado_id', encargado.id)
+    .eq('enviada', true)
+    .order('created_at', {ascending: false});
+
+  // Agrupar por semana
+  const semMap = {};
+  (semsEnc||[]).forEach(row => {
+    const sid = row.semana_id;
+    if (!semMap[sid]) semMap[sid] = { rows:[], desde: row.semanas_nomina?.desde, hasta: row.semanas_nomina?.hasta };
+    semMap[sid].rows.push(row);
+  });
+
+  $('hist-enc-tbody').innerHTML = Object.entries(semMap).length
+    ? Object.entries(semMap).map(([sid, s], i) => {
+        const totalFaltas = s.rows.reduce((sum,r)=>sum+(r.total_faltas||0),0);
+        const totalDesc = s.rows.reduce((sum,r)=>sum+(r.descuento_retardo||0),0);
+        return `<tr>
+          <td style="font-weight:500">Semana #${Object.keys(semMap).length-i}</td>
+          <td>${s.desde||'—'}</td><td>${s.hasta||'—'}</td>
+          <td class="num">${s.rows.length}</td>
+          <td class="num" style="color:${totalFaltas>0?'var(--red)':'var(--text2)'}">${totalFaltas>0?totalFaltas:'—'}</td>
+          <td class="num" style="color:${totalDesc>0?'var(--amber)':'var(--text2)'}">${totalDesc>0?'$'+Math.round(totalDesc).toLocaleString('es-MX'):'—'}</td>
+          <td><button class="btn btn-sm" onclick="verDetalleEnc(${JSON.stringify(s).replace(/"/g,"'")})">Ver</button></td>
+        </tr>`;
+      }).join('')
+    : `<tr><td colspan="7" class="empty">Aún no has enviado semanas</td></tr>`;
+}
+
+function verDetalleEnc(s) {
+  const DIAS_LABEL = ['Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const DIAS = ['lunes','martes','miercoles','jueves','viernes','sabado'];
+  $('hist-enc-detail-title').textContent = `Semana ${s.desde||''} — ${s.hasta||''}`;
+  $('hist-enc-detail-tbody').innerHTML = s.rows.map(row => {
+    const emp = empleados.find(e=>e.id===row.empleado_id);
+    const celdas = DIAS.map(dia => {
+      const est = row[dia]||'ok';
+      const color = est==='ok'?'var(--green)':est==='falta'?'var(--red)':'var(--amber)';
+      const lbl = est==='ok'?'✓':est==='falta'?'✗':'↻';
+      return `<td style="text-align:center;color:${color};font-weight:500">${lbl}${est==='retardo'&&row[dia+'_hora']?`<br><span style="font-size:9px">${row[dia+'_hora']}</span>`:''}`;
+    }).join('');
+    return `<tr><td style="font-weight:500">${emp?emp.nombre:'?'}</td>${celdas}<td class="num" style="color:${(row.total_faltas||0)>0?'var(--red)':'var(--text2)'}">${row.total_faltas||'—'}</td><td class="num" style="color:var(--amber)">${row.descuento_retardo>0?'$'+Math.round(row.descuento_retardo).toLocaleString('es-MX'):'—'}</td><td style="font-size:11px;color:var(--text2)">${row.nota||'—'}</td></tr>`;
+  }).join('');
+  $('hist-enc-detail').style.display = 'block';
 }
 
 // ─── ARRANQUE ─────────────────────────────────────────────────────────────────
