@@ -194,7 +194,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <h2 id="panel-title">Asistencia de la semana</h2>
         <div class="phead-r">
           <button class="btn btn-primary" onclick="openNuevoEmp()">+ Agregar trabajador</button>
-          <button class="btn btn-primary" id="btn-enviar" onclick="confirmarEnvio()" style="background:var(--green);border-color:var(--green)">Enviar asistencia</button>
+          <button class="btn" id="btn-parcial" onclick="confirmarEnvioParcial()" style="background:var(--blue);border-color:var(--blue);color:#fff">Enviar Lun-Mié</button>
+          <button class="btn btn-primary" id="btn-enviar" onclick="confirmarEnvio()" style="background:var(--green);border-color:var(--green)">Enviar semana completa</button>
         </div>
       </div>
       <div class="table-scroll">
@@ -283,7 +284,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <p style="font-size:12px;color:var(--text2);margin-bottom:14px">Una vez enviada, la asistencia quedará registrada para que el administrador la revise y cierre la nómina. Ya no podrás hacer cambios.</p>
   <div class="btn-row">
     <button class="btn" onclick="closeOv('overlay-confirm')">Cancelar</button>
-    <button class="btn btn-primary" style="background:var(--green);border-color:var(--green)" onclick="enviarAsistencia()">Confirmar y enviar</button>
+    <button class="btn btn-primary" id="confirm-btn" style="background:var(--green);border-color:var(--green)" onclick="enviarAsistencia()">Confirmar y enviar</button>
   </div>
 </div>
 </div>
@@ -316,6 +317,7 @@ let semanaActual = null;
 let empleados = [];
 let asistencias = {}; // {empId: {lunes:'ok', lunes_hora:'', ...}}
 let yaEnviada = false;
+let diasBloqueados = []; // ['lunes','martes','miercoles'] si se hizo envío parcial
 let currentLunes, currentSabado;
 
 // ─── LOGIN ────────────────────────────────────────────────────────────────────
@@ -382,6 +384,9 @@ async function initApp() {
     (asistRows || []).forEach(row => {
       asistencias[row.empleado_id] = {...row};
       if (row.enviada) yaEnviada = true;
+      if (row.dias_bloqueados) {
+        try { diasBloqueados = JSON.parse(row.dias_bloqueados); } catch(e) {}
+      }
     });
   }
 
@@ -451,12 +456,21 @@ function calcTotalesEmp(empId) {
 function renderApp() {
   $('panel-title').textContent = 'Asistencia — ' + encargado.obra;
 
+  const btnParcial = $('btn-parcial');
+  const btnEnviar = $('btn-enviar');
+
   if (yaEnviada) {
-    $('banner-area').innerHTML = `<div class="banner green">Asistencia enviada correctamente. El administrador ya puede verla y cerrar la nómina.</div>`;
-    $('btn-enviar').disabled = true;
-    $('btn-enviar').textContent = 'Ya enviada';
+    $('banner-area').innerHTML = `<div class="banner green">Semana completa enviada. El administrador ya puede verla y cerrar la nómina.</div>`;
+    btnEnviar.disabled = true; btnEnviar.textContent = 'Ya enviada';
+    if (btnParcial) { btnParcial.disabled = true; btnParcial.style.opacity = '.4'; }
+  } else if (diasBloqueados.length > 0) {
+    $('banner-area').innerHTML = `<div class="banner blue"><strong>Envío parcial registrado</strong> — Lun, Mar y Mié bloqueados. Captura Jue, Vie y Sáb y presiona <strong>Enviar semana completa</strong> el sábado.</div>`;
+    if (btnParcial) { btnParcial.disabled = true; btnParcial.textContent = 'Lun-Mié enviados'; btnParcial.style.opacity = '.5'; }
+    btnEnviar.disabled = false;
   } else {
-    $('banner-area').innerHTML = `<div class="banner blue">Captura la asistencia de la semana y presiona <strong>Enviar asistencia</strong> cuando esté lista.</div>`;
+    $('banner-area').innerHTML = `<div class="banner blue">Captura la asistencia. Puedes enviar <strong>Lun-Mié</strong> el miércoles (opcional) o enviar todo el sábado.</div>`;
+    if (btnParcial) { btnParcial.disabled = false; btnParcial.style.opacity = '1'; }
+    btnEnviar.disabled = false;
   }
 
   // Cards resumen
@@ -489,14 +503,17 @@ function renderApp() {
         ? `<div class="desc-chip amber">${ret.esHora ? '-1h' : `-${ret.minutos}min`}<br>${fmt(ret.descuento)}</div>`
         : '';
 
-      return `<td>
+      const bloqueado = diaEstasBloqueado(dia);
+      const bloqStyle = bloqueado && !yaEnviada ? 'opacity:.6;' : '';
+      return `<td style="${bloqStyle}">
         <div class="dia-wrap">
-          ${!yaEnviada ? `
+          ${!bloqueado ? `
           <div class="dia-btn ${estado}" onclick="ciclarDia(${emp.id},'${dia}')" title="${DIAS_LABEL[i]}: ${estado}">
             ${estado === 'ok' ? '✓' : estado === 'falta' ? '✗' : '↻'}
-          </div>` : `<div class="dia-btn ${estado}">${estado==='ok'?'✓':estado==='falta'?'✗':'↻'}</div>`}
-          ${!yaEnviada && estado === 'retardo' ? `<input type="time" class="hora-input visible" id="hora-${emp.id}-${dia}" value="${hora}" min="07:00" max="12:00" onchange="setHora(${emp.id},'${dia}',this.value)">` : (estado === 'retardo' && hora ? `<span style="font-size:10px;color:var(--amber)">${hora}</span>` : '')}
+          </div>` : `<div class="dia-btn ${estado}" title="Día bloqueado">${estado==='ok'?'✓':estado==='falta'?'✗':'↻'}</div>`}
+          ${!bloqueado && estado === 'retardo' ? `<input type="time" class="hora-input visible" id="hora-${emp.id}-${dia}" value="${hora}" min="07:00" max="12:00" onchange="setHora(${emp.id},'${dia}',this.value)">` : (estado === 'retardo' && hora ? `<span style="font-size:10px;color:var(--amber)">${hora}</span>` : '')}
           ${descChip}
+          ${bloqueado && !yaEnviada ? '<div style="font-size:9px;color:var(--text3)">bloqueado</div>' : ''}
         </div>
       </td>`;
     }).join('');
@@ -506,7 +523,7 @@ function renderApp() {
       ${celdas}
       <td class="num" style="font-weight:500;color:${t.faltas>0?'var(--red)':'var(--text2)'}">${t.faltas>0?t.faltas:'—'}</td>
       <td class="num" style="color:${t.descRetardo>0?'var(--amber)':'var(--text2)'}">${t.descRetardo>0?fmt(t.descRetardo):'—'}</td>
-      <td>${!yaEnviada
+      <td>${(!yaEnviada)
         ? `<input type="text" placeholder="Nota opcional..." value="${a.nota||''}" style="width:100%;font-size:11px;padding:3px 6px;border:0.5px solid var(--border);border-radius:4px;background:var(--bg3);color:var(--text)" onchange="setNota(${emp.id},this.value)">`
         : `<span style="font-size:11px;color:var(--text2)">${a.nota||'—'}</span>`
       }</td>
@@ -518,8 +535,12 @@ function renderApp() {
 }
 
 // ─── INTERACCIÓN DÍAS ─────────────────────────────────────────────────────────
+function diaEstasBloqueado(dia) {
+  return yaEnviada || diasBloqueados.includes(dia);
+}
+
 function ciclarDia(empId, dia) {
-  if (yaEnviada) return;
+  if (diaEstasBloqueado(dia)) return;
   const a = getAsistencia(empId);
   const ciclo = { ok: 'falta', falta: 'retardo', retardo: 'ok' };
   a[dia] = ciclo[a[dia] || 'ok'];
@@ -529,6 +550,7 @@ function ciclarDia(empId, dia) {
 }
 
 function setHora(empId, dia, hora) {
+  if (diaEstasBloqueado(dia)) return;
   const a = getAsistencia(empId);
   a[dia + '_hora'] = hora;
   autoSave(empId);
@@ -578,6 +600,46 @@ async function guardarAsistencia(empId) {
     const { data } = await db.from('asistencia_semanal').insert([row]).select().single();
     if (data) { asistencias[empId] = { ...a, id: data.id }; }
   }
+}
+
+// ─── ENVÍO PARCIAL (Lun-Mié) ─────────────────────────────────────────────────
+function confirmarEnvioParcial() {
+  if (diasBloqueados.length > 0 || yaEnviada) return;
+  let totalFaltasLMX = 0;
+  const DIAS_PARCIAL = ['lunes','martes','miercoles'];
+  empleados.forEach(e => {
+    DIAS_PARCIAL.forEach(dia => {
+      if ((getAsistencia(e.id)[dia]||'ok') === 'falta') totalFaltasLMX++;
+    });
+  });
+  $('confirm-body').innerHTML = `
+    <div style="background:var(--bg3);border-radius:var(--radius);padding:12px;font-size:13px">
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--text2)">Días a bloquear</span><strong>Lunes, Martes, Miércoles</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--text2)">Trabajadores</span><strong>${empleados.length}</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--text2)">Faltas Lun-Mié</span><strong style="color:var(--red)">${totalFaltasLMX}</strong></div>
+    </div>
+    <p style="font-size:12px;color:var(--text2);margin-top:10px">Lunes, martes y miércoles quedarán bloqueados. Jueves, viernes y sábado seguirán editables hasta el envío final.</p>`;
+  $('confirm-btn').textContent = 'Confirmar envío parcial';
+  $('confirm-btn').onclick = enviarParcial;
+  $('overlay-confirm').classList.add('open');
+}
+
+async function enviarParcial() {
+  const DIAS_PARCIAL = ['lunes','martes','miercoles'];
+  for (const emp of empleados) {
+    await guardarAsistencia(emp.id);
+  }
+  // Guardar días bloqueados en cada registro
+  const ids = empleados.map(e => asistencias[e.id]?.id).filter(Boolean);
+  if (ids.length) {
+    await db.from('asistencia_semanal')
+      .update({ dias_bloqueados: JSON.stringify(DIAS_PARCIAL) })
+      .in('id', ids);
+  }
+  diasBloqueados = DIAS_PARCIAL;
+  closeOv('overlay-confirm');
+  showToast('Lun-Mié enviados y bloqueados ✓');
+  renderApp();
 }
 
 // ─── ENVÍO FINAL ──────────────────────────────────────────────────────────────
