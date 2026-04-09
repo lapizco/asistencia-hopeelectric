@@ -660,11 +660,9 @@ async function cargarAsistenciasEncargado(semanaId) {
   registros.forEach(row => {
     const emp = empleados.find(e => e.id === row.empleado_id);
     if (!emp) return;
-    // Solo saltar si tiene entrada manual guardada en BD (con id)
+    // Solo saltar si tiene entrada manual guardada en BD (con id real)
     const enEx = nomina[row.empleado_id];
     if (enEx && enEx.id) return;
-    // Borrar entrada vacía inicializada por getNom() para poder sobreescribir
-    delete nomina[row.empleado_id];
 
     // Días a considerar: todos si es envío final, solo bloqueados si es parcial
     let diasConDatos = ['lunes','martes','miercoles','jueves','viernes','sabado'];
@@ -696,6 +694,7 @@ async function cargarAsistenciasEncargado(semanaId) {
         ? 'Retardo(s) según encargado' + notaBase
         : esParcial ? 'Parcial Lun-Mié recibido' : '';
 
+    // Sobreescribir siempre (aunque getNom haya creado entrada vacía sin id)
     nomina[row.empleado_id] = {
       faltas: faltas,
       hext: 0,
