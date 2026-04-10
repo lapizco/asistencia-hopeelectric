@@ -390,19 +390,15 @@ function calcDescRetardo(hora, salarioDiario) {
   if (!hora) return { minutos: 0, descuento: 0 };
   const [h, m] = hora.split(':').map(Number);
   const totalMin = h * 60 + m;
-  const tolerancia = 7 * 60 + 10; // 7:10
+  const tolerancia = 7 * 60 + 10; // 7:10 sin descuento
   const entrada = 7 * 60; // 7:00
 
   if (totalMin <= tolerancia) return { minutos: 0, descuento: 0 };
 
   const minRetraso = totalMin - entrada;
   const salarioHora = salarioDiario / 8;
-
-  if (minRetraso >= 45) {
-    return { minutos: minRetraso, descuento: salarioHora, esHora: true };
-  } else {
-    return { minutos: minRetraso, descuento: salarioHora * (minRetraso / 60), esHora: false };
-  }
+  // Proporcional exacto: cada minuto se descuenta
+  return { minutos: minRetraso, descuento: salarioHora * (minRetraso / 60), esHora: false };
 }
 
 function getAsistencia(empId) {
