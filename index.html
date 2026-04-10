@@ -125,7 +125,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .phead{padding:8px 12px;flex-wrap:wrap;gap:6px}
 .phead-r{flex-wrap:wrap;gap:6px;width:100%}
 .phead-r .btn{flex:1;justify-content:center;font-size:11px}
-/* Tabla asistencia — scroll horizontal */
 .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .table-scroll::after{content:'← desliza →';display:block;text-align:center;font-size:10px;color:var(--text3);padding:4px;background:var(--bg3)}
 .asis-table{min-width:600px;font-size:11px}
@@ -133,7 +132,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .asis-table td{padding:4px 5px}
 .dia-btn{width:26px;height:26px;font-size:10px}
 .hora-input{width:52px;font-size:10px}
-/* Modal — pantalla completa */
 .overlay{padding:0;align-items:flex-end}
 .modal{width:100%;max-width:100%;border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:16px;max-height:90vh;overflow-y:auto;margin:0}
 .fg{grid-template-columns:1fr}
@@ -178,9 +176,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 </div>
 
-<div class="tabs-enc" style="display:flex;background:var(--bg2);border-bottom:0.5px solid var(--border);padding:0 16px;overflow-x:auto">
-<div class="tab-enc active" onclick="swEnc('semana')" id="tenc-semana" style="padding:9px 14px;font-size:13px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;white-space:nowrap">Semana actual</div>
-<div class="tab-enc" onclick="swEnc('historial')" id="tenc-historial" style="padding:9px 14px;font-size:13px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;white-space:nowrap">Historial</div>
+<div style="display:flex;background:var(--bg2);border-bottom:0.5px solid var(--border);padding:0 16px;overflow-x:auto">
+<div onclick="swEnc('semana')" id="tenc-semana" style="padding:9px 14px;font-size:13px;cursor:pointer;color:var(--text);border-bottom:2px solid var(--text);font-weight:500;white-space:nowrap">Semana actual</div>
+<div onclick="swEnc('historial')" id="tenc-historial" style="padding:9px 14px;font-size:13px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;white-space:nowrap">Historial</div>
 </div>
 
 <div class="content">
@@ -194,9 +192,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <h2 id="panel-title">Asistencia de la semana</h2>
 <div class="phead-r">
 <button class="btn btn-primary" onclick="openNuevoEmp()">+ Agregar trabajador</button>
-          <button class="btn btn-primary" id="btn-enviar" onclick="confirmarEnvio()" style="background:var(--green);border-color:var(--green)">Enviar asistencia</button>
-          <button class="btn" id="btn-parcial" onclick="confirmarEnvioParcial()" style="background:var(--blue);border-color:var(--blue);color:#fff">Enviar Lun-Mié</button>
-          <button class="btn btn-primary" id="btn-enviar" onclick="confirmarEnvio()" style="background:var(--green);border-color:var(--green)">Enviar semana completa</button>
+<button class="btn" id="btn-parcial" onclick="confirmarEnvioParcial()" style="background:var(--blue);border-color:var(--blue);color:#fff">Enviar Lun-Mié</button>
+<button class="btn btn-primary" id="btn-enviar" onclick="confirmarEnvio()" style="background:var(--green);border-color:var(--green)">Enviar semana completa</button>
 </div>
 </div>
 <div class="table-scroll">
@@ -222,15 +219,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <td colspan="6"></td>
 <td class="num" id="ft-faltas"></td>
 <td class="num" id="ft-retardos"></td>
+<td></td>
 </tr>
 </tfoot>
 </table>
 </div>
 </div>
 </div>
-</div>
-
-</div><!-- /enc-semana -->
 
 <!-- HISTORIAL -->
 <div id="enc-historial" style="display:none">
@@ -245,7 +240,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 <div id="hist-enc-detail" style="display:none">
 <div class="panel">
-<div class="phead"><h2 id="hist-enc-detail-title">Detalle</h2><button class="btn btn-sm" onclick="$('hist-enc-detail').style.display='none'">Cerrar detalle</button></div>
+<div class="phead"><h2 id="hist-enc-detail-title">Detalle</h2><button class="btn btn-sm" onclick="document.getElementById('hist-enc-detail').style.display='none'">Cerrar detalle</button></div>
 <div class="table-scroll">
 <table>
 <thead><tr><th>Trabajador</th><th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th class="num">Faltas</th><th class="num">Desc.</th><th>Nota</th></tr></thead>
@@ -254,10 +249,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 </div>
 </div>
-</div><!-- /enc-historial -->
+</div>
 
-</div><!-- /content -->
-</div><!-- /app -->
+</div>
+</div>
 
 <!-- MODAL NUEVO EMPLEADO -->
 <div class="overlay" id="overlay-emp">
@@ -285,8 +280,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <p style="font-size:12px;color:var(--text2);margin-bottom:14px">Una vez enviada, la asistencia quedará registrada para que el administrador la revise y cierre la nómina. Ya no podrás hacer cambios.</p>
 <div class="btn-row">
 <button class="btn" onclick="closeOv('overlay-confirm')">Cancelar</button>
-    <button class="btn btn-primary" style="background:var(--green);border-color:var(--green)" onclick="enviarAsistencia()">Confirmar y enviar</button>
-    <button class="btn btn-primary" id="confirm-btn" style="background:var(--green);border-color:var(--green)" onclick="enviarAsistencia()">Confirmar y enviar</button>
+<button class="btn btn-primary" id="confirm-btn" style="background:var(--green);border-color:var(--green)" onclick="enviarAsistencia()">Confirmar y enviar</button>
 </div>
 </div>
 </div>
@@ -317,154 +311,141 @@ function closeOv(id){$(id).classList.remove('open');}
 let encargado = null;
 let semanaActual = null;
 let empleados = [];
-let asistencias = {}; // {empId: {lunes:'ok', lunes_hora:'', ...}}
+let asistencias = {};
 let yaEnviada = false;
-let diasBloqueados = []; // ['lunes','martes','miercoles'] si se hizo envío parcial
+let diasBloqueados = [];
 let currentLunes, currentSabado;
 
 // ─── LOGIN ────────────────────────────────────────────────────────────────────
 async function doLogin() {
-const email = $('login-email').value.trim();
-const pass  = $('login-pass').value;
-const errEl = $('login-err');
-const btn   = $('login-btn');
-errEl.style.display = 'none';
-btn.textContent = 'Entrando...'; btn.disabled = true;
+  const email = $('login-email').value.trim();
+  const pass  = $('login-pass').value;
+  const errEl = $('login-err');
+  const btn   = $('login-btn');
+  errEl.style.display = 'none';
+  btn.textContent = 'Entrando...'; btn.disabled = true;
 
-const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
-btn.textContent = 'Entrar'; btn.disabled = false;
+  const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
+  btn.textContent = 'Entrar'; btn.disabled = false;
 
-if (error) { errEl.style.display = 'block'; return; }
+  if (error) { errEl.style.display = 'block'; return; }
 
-// Verificar que sea encargado registrado
-const { data: enc } = await db.from('encargados_obra').select('*').eq('email', email).eq('activo', true).single();
-if (!enc) {
-errEl.textContent = 'Este correo no tiene acceso al portal de encargados.';
-errEl.style.display = 'block';
-await db.auth.signOut();
-return;
-}
-encargado = enc;
-mostrarApp();
+  const { data: enc } = await db.from('encargados_obra').select('*').eq('email', email).eq('activo', true).single();
+  if (!enc) {
+    errEl.textContent = 'Este correo no tiene acceso al portal de encargados.';
+    errEl.style.display = 'block';
+    await db.auth.signOut();
+    return;
+  }
+  encargado = enc;
+  mostrarApp();
 }
 
 async function doLogout() {
-await db.auth.signOut();
-location.reload();
+  await db.auth.signOut();
+  location.reload();
 }
 
 function mostrarApp() {
-$('login-wrap').style.display = 'none';
-$('app-wrap').style.display = 'flex';
-$('obra-pill').textContent = encargado.obra;
-$('user-name').textContent = encargado.nombre;
-initApp();
+  $('login-wrap').style.display = 'none';
+  $('app-wrap').style.display = 'flex';
+  $('obra-pill').textContent = encargado.obra;
+  $('user-name').textContent = encargado.nombre;
+  initApp();
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 async function initApp() {
-currentLunes = getLunes(new Date());
-currentSabado = getSabado(currentLunes);
-$('period-txt').textContent = fmtD(currentLunes) + ' — ' + fmtD(currentSabado);
+  currentLunes = getLunes(new Date());
+  currentSabado = getSabado(currentLunes);
+  $('period-txt').textContent = fmtD(currentLunes) + ' — ' + fmtD(currentSabado);
 
-// Cargar o crear semana abierta
-let { data: sems } = await db.from('semanas_nomina').select('*').eq('cerrada', false).order('desde', {ascending: false}).limit(1);
-if (sems && sems.length > 0) {
-semanaActual = sems[0];
-currentLunes = fromISO(semanaActual.desde);
-currentSabado = fromISO(semanaActual.hasta);
-$('period-txt').textContent = fmtD(currentLunes) + ' — ' + fmtD(currentSabado);
-}
+  let { data: sems } = await db.from('semanas_nomina').select('*').eq('cerrada', false).order('desde', {ascending: false}).limit(1);
+  if (sems && sems.length > 0) {
+    semanaActual = sems[0];
+    currentLunes = fromISO(semanaActual.desde);
+    currentSabado = fromISO(semanaActual.hasta);
+    $('period-txt').textContent = fmtD(currentLunes) + ' — ' + fmtD(currentSabado);
+  }
 
-// Cargar empleados de la obra
-const { data: emps } = await db.from('empleados_nomina').select('*').eq('obra', encargado.obra).eq('activo', true).order('nombre');
-empleados = emps || [];
+  const { data: emps } = await db.from('empleados_nomina').select('*').eq('obra', encargado.obra).eq('activo', true).order('nombre');
+  empleados = emps || [];
 
-// Cargar asistencias existentes
-if (semanaActual) {
-const { data: asistRows } = await db.from('asistencia_semanal').select('*').eq('semana_id', semanaActual.id);
-(asistRows || []).forEach(row => {
-asistencias[row.empleado_id] = {...row};
-if (row.enviada) yaEnviada = true;
+  if (semanaActual) {
+    const { data: asistRows } = await db.from('asistencia_semanal').select('*').eq('semana_id', semanaActual.id);
+    (asistRows || []).forEach(row => {
+      asistencias[row.empleado_id] = {...row};
+      if (row.enviada) yaEnviada = true;
       if (row.dias_bloqueados) {
         try { diasBloqueados = JSON.parse(row.dias_bloqueados); } catch(e) {}
       }
-});
-}
+    });
+  }
 
-renderApp();
+  renderApp();
 }
 
 // ─── LÓGICA RETARDOS ──────────────────────────────────────────────────────────
-// Regla: 7:00-7:10 sin descuento, 7:11-7:54 descuento minutos, 7:55+ descuento 1h completa
 function calcDescRetardo(hora, salarioDiario) {
-if (!hora) return { minutos: 0, descuento: 0 };
-const [h, m] = hora.split(':').map(Number);
-const totalMin = h * 60 + m;
-const entrada = 7 * 60; // 7:00
-const tolerancia = 7 * 60 + 10; // 7:10
-const umbralHora = 7 * 60 + 45; // 7:45 — después de 45 min se descuenta hora completa
+  if (!hora) return { minutos: 0, descuento: 0 };
+  const [h, m] = hora.split(':').map(Number);
+  const totalMin = h * 60 + m;
+  const tolerancia = 7 * 60 + 10; // 7:10
+  const entrada = 7 * 60; // 7:00
 
-if (totalMin <= tolerancia) return { minutos: 0, descuento: 0 };
+  if (totalMin <= tolerancia) return { minutos: 0, descuento: 0 };
 
-const minRetraso = totalMin - entrada; // minutos desde las 7:00
-const salarioHora = salarioDiario / 8; // salario por hora (jornada 8h)
+  const minRetraso = totalMin - entrada;
+  const salarioHora = salarioDiario / 8;
 
-if (minRetraso >= 45) {
-// Descuento hora completa
-return { minutos: minRetraso, descuento: salarioHora, esHora: true };
-} else {
-// Descuento proporcional por minutos
-const descuento = salarioHora * (minRetraso / 60);
-return { minutos: minRetraso, descuento, esHora: false };
-}
+  if (minRetraso >= 45) {
+    return { minutos: minRetraso, descuento: salarioHora, esHora: true };
+  } else {
+    return { minutos: minRetraso, descuento: salarioHora * (minRetraso / 60), esHora: false };
+  }
 }
 
 function getAsistencia(empId) {
-if (!asistencias[empId]) {
-asistencias[empId] = {
-empleado_id: empId, semana_id: semanaActual?.id,
-encargado_id: encargado.id,
-lunes:'ok', martes:'ok', miercoles:'ok', jueves:'ok', viernes:'ok', sabado:'ok',
-lunes_hora:'', martes_hora:'', miercoles_hora:'', jueves_hora:'', viernes_hora:'', sabado_hora:'',
-enviada: false
-};
-}
-return asistencias[empId];
+  if (!asistencias[empId]) {
+    asistencias[empId] = {
+      empleado_id: empId, semana_id: semanaActual?.id,
+      encargado_id: encargado.id,
+      lunes:'ok', martes:'ok', miercoles:'ok', jueves:'ok', viernes:'ok', sabado:'ok',
+      lunes_hora:'', martes_hora:'', miercoles_hora:'', jueves_hora:'', viernes_hora:'', sabado_hora:'',
+      enviada: false
+    };
+  }
+  return asistencias[empId];
 }
 
 function calcTotalesEmp(empId) {
-const emp = empleados.find(e => e.id === empId);
-const a = getAsistencia(empId);
-const salarioDiario = (emp?.salario || 0) / 6;
-let faltas = 0, descRetardo = 0, minRetardo = 0;
+  const emp = empleados.find(e => e.id === empId);
+  const a = getAsistencia(empId);
+  const salarioDiario = (emp?.salario || 0) / 6;
+  let faltas = 0, descRetardo = 0, minRetardo = 0;
 
-DIAS.forEach(dia => {
-const estado = a[dia] || 'ok';
-if (estado === 'falta') faltas++;
-if (estado === 'retardo') {
-const hora = a[dia + '_hora'];
-const res = calcDescRetardo(hora, salarioDiario);
-descRetardo += res.descuento;
-minRetardo += res.minutos;
-}
-});
+  DIAS.forEach(dia => {
+    const estado = a[dia] || 'ok';
+    if (estado === 'falta') faltas++;
+    if (estado === 'retardo') {
+      const res = calcDescRetardo(a[dia + '_hora'], salarioDiario);
+      descRetardo += res.descuento;
+      minRetardo += res.minutos;
+    }
+  });
 
-const descFaltas = faltas * salarioDiario;
-return { faltas, descFaltas, descRetardo, minRetardo };
+  const descFaltas = faltas * salarioDiario;
+  return { faltas, descFaltas, descRetardo, minRetardo };
 }
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
 function renderApp() {
-$('panel-title').textContent = 'Asistencia — ' + encargado.obra;
+  $('panel-title').textContent = 'Asistencia — ' + encargado.obra;
 
   const btnParcial = $('btn-parcial');
   const btnEnviar = $('btn-enviar');
 
-if (yaEnviada) {
-    $('banner-area').innerHTML = `<div class="banner green">Asistencia enviada correctamente. El administrador ya puede verla y cerrar la nómina.</div>`;
-    $('btn-enviar').disabled = true;
-    $('btn-enviar').textContent = 'Ya enviada';
+  if (yaEnviada) {
     $('banner-area').innerHTML = `<div class="banner green">Semana completa enviada. El administrador ya puede verla y cerrar la nómina.</div>`;
     btnEnviar.disabled = true; btnEnviar.textContent = 'Ya enviada';
     if (btnParcial) { btnParcial.disabled = true; btnParcial.style.opacity = '.4'; }
@@ -472,153 +453,149 @@ if (yaEnviada) {
     $('banner-area').innerHTML = `<div class="banner blue"><strong>Envío parcial registrado</strong> — Lun, Mar y Mié bloqueados. Captura Jue, Vie y Sáb y presiona <strong>Enviar semana completa</strong> el sábado.</div>`;
     if (btnParcial) { btnParcial.disabled = true; btnParcial.textContent = 'Lun-Mié enviados'; btnParcial.style.opacity = '.5'; }
     btnEnviar.disabled = false;
-} else {
-    $('banner-area').innerHTML = `<div class="banner blue">Captura la asistencia de la semana y presiona <strong>Enviar asistencia</strong> cuando esté lista.</div>`;
+  } else {
     $('banner-area').innerHTML = `<div class="banner blue">Captura la asistencia. Puedes enviar <strong>Lun-Mié</strong> el miércoles (opcional) o enviar todo el sábado.</div>`;
     if (btnParcial) { btnParcial.disabled = false; btnParcial.style.opacity = '1'; }
     btnEnviar.disabled = false;
-}
+  }
 
-// Cards resumen
-const totalEmp = empleados.length;
-let totalFaltas = 0, totalRetDesc = 0;
-empleados.forEach(e => {
-const t = calcTotalesEmp(e.id);
-totalFaltas += t.faltas;
-totalRetDesc += t.descRetardo;
-});
+  // Cards resumen
+  let totalFaltas = 0, totalRetDesc = 0;
+  empleados.forEach(e => {
+    const t = calcTotalesEmp(e.id);
+    totalFaltas += t.faltas;
+    totalRetDesc += t.descRetardo;
+  });
 
-$('resumen-cards').innerHTML = `
-   <div class="mcard"><div class="lbl">Trabajadores</div><div class="val">${totalEmp}</div><div class="sub">${encargado.obra}</div></div>
-   <div class="mcard"><div class="lbl">Total faltas semana</div><div class="val" style="color:var(--red)">${totalFaltas}</div></div>
-   <div class="mcard"><div class="lbl">Desc. retardos total</div><div class="val" style="font-size:16px;color:var(--amber)">${fmt(totalRetDesc)}</div></div>`;
+  $('resumen-cards').innerHTML = `
+    <div class="mcard"><div class="lbl">Trabajadores</div><div class="val">${empleados.length}</div><div class="sub">${encargado.obra}</div></div>
+    <div class="mcard"><div class="lbl">Total faltas semana</div><div class="val" style="color:var(--red)">${totalFaltas}</div></div>
+    <div class="mcard"><div class="lbl">Desc. retardos total</div><div class="val" style="font-size:16px;color:var(--amber)">${fmt(totalRetDesc)}</div></div>`;
 
-// Tabla
-let ftFaltas = 0, ftRetDesc = 0;
-$('asis-tbody').innerHTML = empleados.map(emp => {
-const a = getAsistencia(emp.id);
-const t = calcTotalesEmp(emp.id);
-ftFaltas += t.faltas; ftRetDesc += t.descRetardo;
+  // Tabla
+  let ftFaltas = 0, ftRetDesc = 0;
+  $('asis-tbody').innerHTML = empleados.map(emp => {
+    const a = getAsistencia(emp.id);
+    const t = calcTotalesEmp(emp.id);
+    ftFaltas += t.faltas; ftRetDesc += t.descRetardo;
 
-const celdas = DIAS.map((dia, i) => {
-const estado = a[dia] || 'ok';
-const hora = a[dia+'_hora'] || '';
-const salDiario = emp.salario / 6;
-const ret = estado === 'retardo' ? calcDescRetardo(hora, salDiario) : null;
-const descChip = ret && ret.descuento > 0
-? `<div class="desc-chip amber">${ret.esHora ? '-1h' : `-${ret.minutos}min`}<br>${fmt(ret.descuento)}</div>`
-: '';
+    const celdas = DIAS.map((dia, i) => {
+      const estado = a[dia] || 'ok';
+      const hora = a[dia+'_hora'] || '';
+      const bloqueado = diaEstaBloqueado(dia);
+      const salDiario = emp.salario / 6;
+      const ret = estado === 'retardo' ? calcDescRetardo(hora, salDiario) : null;
+      const descChip = ret && ret.descuento > 0
+        ? `<div class="desc-chip amber">${ret.esHora ? '-1h' : `-${ret.minutos}min`}<br>${fmt(ret.descuento)}</div>`
+        : '';
 
-      return `<td>
-      const bloqueado = diaEstasBloqueado(dia);
-      const bloqStyle = bloqueado && !yaEnviada ? 'opacity:.6;' : '';
+      const bloqStyle = bloqueado ? 'opacity:.6;' : '';
       return `<td style="${bloqStyle}">
-       <div class="dia-wrap">
-          ${!yaEnviada ? `
-          ${!bloqueado ? `
-         <div class="dia-btn ${estado}" onclick="ciclarDia(${emp.id},'${dia}')" title="${DIAS_LABEL[i]}: ${estado}">
-           ${estado === 'ok' ? '✓' : estado === 'falta' ? '✗' : '↻'}
-          </div>` : `<div class="dia-btn ${estado}">${estado==='ok'?'✓':estado==='falta'?'✗':'↻'}</div>`}
-          ${!yaEnviada && estado === 'retardo' ? `<input type="time" class="hora-input visible" id="hora-${emp.id}-${dia}" value="${hora}" min="07:00" max="12:00" onchange="setHora(${emp.id},'${dia}',this.value)">` : (estado === 'retardo' && hora ? `<span style="font-size:10px;color:var(--amber)">${hora}</span>` : '')}
-          </div>` : `<div class="dia-btn ${estado}" title="Día bloqueado">${estado==='ok'?'✓':estado==='falta'?'✗':'↻'}</div>`}
-          ${!bloqueado && estado === 'retardo' ? `<input type="time" class="hora-input visible" id="hora-${emp.id}-${dia}" value="${hora}" min="07:00" max="12:00" onchange="setHora(${emp.id},'${dia}',this.value)">` : (estado === 'retardo' && hora ? `<span style="font-size:10px;color:var(--amber)">${hora}</span>` : '')}
-         ${descChip}
-          ${bloqueado && !yaEnviada ? '<div style="font-size:9px;color:var(--text3)">bloqueado</div>' : ''}
-       </div>
-     </td>`;
-}).join('');
+        <div class="dia-wrap">
+          ${!bloqueado
+            ? `<div class="dia-btn ${estado}" onclick="ciclarDia(${emp.id},'${dia}')" title="${DIAS_LABEL[i]}: ${estado}">
+                ${estado === 'ok' ? '✓' : estado === 'falta' ? '✗' : '↻'}
+               </div>`
+            : `<div class="dia-btn ${estado}">${estado==='ok'?'✓':estado==='falta'?'✗':'↻'}</div>`
+          }
+          ${!bloqueado && estado === 'retardo'
+            ? `<input type="time" class="hora-input visible" value="${hora}" min="07:00" max="12:00" onchange="setHora(${emp.id},'${dia}',this.value)">`
+            : (estado === 'retardo' && hora ? `<span style="font-size:10px;color:var(--amber)">${hora}</span>` : '')
+          }
+          ${descChip}
+          ${bloqueado && !yaEnviada ? '<div style="font-size:9px;color:var(--text3)">bloq.</div>' : ''}
+        </div>
+      </td>`;
+    }).join('');
 
-return `<tr>
-     <td>${emp.nombre}<br><span style="font-size:11px;color:var(--text2)">${emp.puesto}</span></td>
-     ${celdas}
-     <td class="num" style="font-weight:500;color:${t.faltas>0?'var(--red)':'var(--text2)'}">${t.faltas>0?t.faltas:'—'}</td>
-     <td class="num" style="color:${t.descRetardo>0?'var(--amber)':'var(--text2)'}">${t.descRetardo>0?fmt(t.descRetardo):'—'}</td>
+    return `<tr>
+      <td>${emp.nombre}<br><span style="font-size:11px;color:var(--text2)">${emp.puesto||''}</span></td>
+      ${celdas}
+      <td class="num" style="font-weight:500;color:${t.faltas>0?'var(--red)':'var(--text2)'}">${t.faltas>0?t.faltas:'—'}</td>
+      <td class="num" style="color:${t.descRetardo>0?'var(--amber)':'var(--text2)'}">${t.descRetardo>0?fmt(t.descRetardo):'—'}</td>
       <td>${!yaEnviada
-      <td>${(!yaEnviada)
-       ? `<input type="text" placeholder="Nota opcional..." value="${a.nota||''}" style="width:100%;font-size:11px;padding:3px 6px;border:0.5px solid var(--border);border-radius:4px;background:var(--bg3);color:var(--text)" onchange="setNota(${emp.id},this.value)">`
-       : `<span style="font-size:11px;color:var(--text2)">${a.nota||'—'}</span>`
-     }</td>
-   </tr>`;
-}).join('');
+        ? `<input type="text" placeholder="Nota opcional..." value="${a.nota||''}" style="width:100%;font-size:11px;padding:3px 6px;border:0.5px solid var(--border);border-radius:4px;background:var(--bg3);color:var(--text)" onchange="setNota(${emp.id},this.value)">`
+        : `<span style="font-size:11px;color:var(--text2)">${a.nota||'—'}</span>`
+      }</td>
+    </tr>`;
+  }).join('');
 
-$('ft-faltas').textContent = ftFaltas > 0 ? ftFaltas : '—';
-$('ft-retardos').textContent = ftRetDesc > 0 ? fmt(ftRetDesc) : '—';
+  $('ft-faltas').textContent = ftFaltas > 0 ? ftFaltas : '—';
+  $('ft-retardos').textContent = ftRetDesc > 0 ? fmt(ftRetDesc) : '—';
 }
 
 // ─── INTERACCIÓN DÍAS ─────────────────────────────────────────────────────────
-function diaEstasBloqueado(dia) {
+function diaEstaBloqueado(dia) {
   return yaEnviada || diasBloqueados.includes(dia);
 }
 
 function ciclarDia(empId, dia) {
-  if (yaEnviada) return;
-  if (diaEstasBloqueado(dia)) return;
-const a = getAsistencia(empId);
-const ciclo = { ok: 'falta', falta: 'retardo', retardo: 'ok' };
-a[dia] = ciclo[a[dia] || 'ok'];
-if (a[dia] !== 'retardo') a[dia + '_hora'] = '';
-autoSave(empId);
-renderApp();
+  if (diaEstaBloqueado(dia)) return;
+  const a = getAsistencia(empId);
+  const ciclo = { ok: 'falta', falta: 'retardo', retardo: 'ok' };
+  a[dia] = ciclo[a[dia] || 'ok'];
+  if (a[dia] !== 'retardo') a[dia + '_hora'] = '';
+  autoSave(empId);
+  renderApp();
 }
 
 function setHora(empId, dia, hora) {
-  if (diaEstasBloqueado(dia)) return;
-const a = getAsistencia(empId);
-a[dia + '_hora'] = hora;
-autoSave(empId);
-renderApp();
+  if (diaEstaBloqueado(dia)) return;
+  const a = getAsistencia(empId);
+  a[dia + '_hora'] = hora;
+  autoSave(empId);
+  renderApp();
 }
 
 function setNota(empId, nota) {
-const a = getAsistencia(empId);
-a.nota = nota;
-autoSave(empId);
+  const a = getAsistencia(empId);
+  a.nota = nota;
+  autoSave(empId);
 }
 
 // ─── AUTOGUARDADO ─────────────────────────────────────────────────────────────
 let saveTimers = {};
 function autoSave(empId) {
-clearTimeout(saveTimers[empId]);
-saveTimers[empId] = setTimeout(() => guardarAsistencia(empId), 800);
+  clearTimeout(saveTimers[empId]);
+  saveTimers[empId] = setTimeout(() => guardarAsistencia(empId), 800);
 }
 
 async function guardarAsistencia(empId) {
-if (!semanaActual) return;
-const a = getAsistencia(empId);
-const emp = empleados.find(e => e.id === empId);
-const t = calcTotalesEmp(empId);
+  if (!semanaActual) return;
+  const a = getAsistencia(empId);
+  const t = calcTotalesEmp(empId);
 
-const row = {
-semana_id: semanaActual.id,
-empleado_id: empId,
-encargado_id: encargado.id,
-lunes: a.lunes||'ok', martes: a.martes||'ok',
-miercoles: a.miercoles||'ok', jueves: a.jueves||'ok',
-viernes: a.viernes||'ok', sabado: a.sabado||'ok',
-lunes_hora: a.lunes_hora||null, martes_hora: a.martes_hora||null,
-miercoles_hora: a.miercoles_hora||null, jueves_hora: a.jueves_hora||null,
-viernes_hora: a.viernes_hora||null, sabado_hora: a.sabado_hora||null,
-total_faltas: t.faltas,
-descuento_retardo: t.descRetardo,
-descuento_faltas: t.descFaltas,
-nota: a.nota||null,
-enviada: false,
-updated_at: new Date().toISOString()
-};
+  const row = {
+    semana_id: semanaActual.id,
+    empleado_id: empId,
+    encargado_id: encargado.id,
+    lunes: a.lunes||'ok', martes: a.martes||'ok',
+    miercoles: a.miercoles||'ok', jueves: a.jueves||'ok',
+    viernes: a.viernes||'ok', sabado: a.sabado||'ok',
+    lunes_hora: a.lunes_hora||null, martes_hora: a.martes_hora||null,
+    miercoles_hora: a.miercoles_hora||null, jueves_hora: a.jueves_hora||null,
+    viernes_hora: a.viernes_hora||null, sabado_hora: a.sabado_hora||null,
+    total_faltas: t.faltas,
+    descuento_retardo: t.descRetardo,
+    descuento_faltas: t.descFaltas,
+    nota: a.nota||null,
+    enviada: false,
+    updated_at: new Date().toISOString()
+  };
 
-if (a.id) {
-await db.from('asistencia_semanal').update(row).eq('id', a.id);
-} else {
-const { data } = await db.from('asistencia_semanal').insert([row]).select().single();
-if (data) { asistencias[empId] = { ...a, id: data.id }; }
-}
+  if (a.id) {
+    await db.from('asistencia_semanal').update(row).eq('id', a.id);
+  } else {
+    const { data } = await db.from('asistencia_semanal').insert([row]).select().single();
+    if (data) { asistencias[empId] = { ...a, id: data.id }; }
+  }
 }
 
 // ─── ENVÍO PARCIAL (Lun-Mié) ─────────────────────────────────────────────────
 function confirmarEnvioParcial() {
   if (diasBloqueados.length > 0 || yaEnviada) return;
-  let totalFaltasLMX = 0;
   const DIAS_PARCIAL = ['lunes','martes','miercoles'];
+  let totalFaltasLMX = 0;
   empleados.forEach(e => {
     DIAS_PARCIAL.forEach(dia => {
       if ((getAsistencia(e.id)[dia]||'ok') === 'falta') totalFaltasLMX++;
@@ -641,7 +618,6 @@ async function enviarParcial() {
   for (const emp of empleados) {
     await guardarAsistencia(emp.id);
   }
-  // Guardar días bloqueados en cada registro
   const ids = empleados.map(e => asistencias[e.id]?.id).filter(Boolean);
   if (ids.length) {
     await db.from('asistencia_semanal')
@@ -656,137 +632,141 @@ async function enviarParcial() {
 
 // ─── ENVÍO FINAL ──────────────────────────────────────────────────────────────
 function confirmarEnvio() {
-let totalFaltas = 0, totalRetDesc = 0, empSinCaptura = 0;
-empleados.forEach(e => {
-const t = calcTotalesEmp(e.id);
-totalFaltas += t.faltas;
-totalRetDesc += t.descRetardo;
-});
+  let totalFaltas = 0, totalRetDesc = 0;
+  empleados.forEach(e => {
+    const t = calcTotalesEmp(e.id);
+    totalFaltas += t.faltas;
+    totalRetDesc += t.descRetardo;
+  });
 
-$('confirm-body').innerHTML = `
-   <div style="background:var(--bg3);border-radius:var(--radius);padding:12px;font-size:13px">
-     <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--text2)">Obra</span><strong>${encargado.obra}</strong></div>
-     <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--text2)">Período</span><strong>${fmtD(currentLunes)} — ${fmtD(currentSabado)}</strong></div>
-     <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--text2)">Trabajadores</span><strong>${empleados.length}</strong></div>
-     <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--text2)">Total faltas</span><strong style="color:var(--red)">${totalFaltas}</strong></div>
-     <div style="display:flex;justify-content:space-between;padding:3px 0;border-top:0.5px solid var(--border);margin-top:6px;padding-top:8px"><span style="color:var(--text2)">Desc. retardos</span><strong style="color:var(--amber)">${fmt(totalRetDesc)}</strong></div>
-   </div>`;
-$('overlay-confirm').classList.add('open');
+  $('confirm-body').innerHTML = `
+    <div style="background:var(--bg3);border-radius:var(--radius);padding:12px;font-size:13px">
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--text2)">Obra</span><strong>${encargado.obra}</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--text2)">Período</span><strong>${fmtD(currentLunes)} — ${fmtD(currentSabado)}</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--text2)">Trabajadores</span><strong>${empleados.length}</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:var(--text2)">Total faltas</span><strong style="color:var(--red)">${totalFaltas}</strong></div>
+      <div style="display:flex;justify-content:space-between;padding:3px 0;border-top:0.5px solid var(--border);margin-top:6px;padding-top:8px"><span style="color:var(--text2)">Desc. retardos</span><strong style="color:var(--amber)">${fmt(totalRetDesc)}</strong></div>
+    </div>`;
+  $('confirm-btn').textContent = 'Confirmar y enviar';
+  $('confirm-btn').onclick = enviarAsistencia;
+  $('overlay-confirm').classList.add('open');
 }
 
 async function enviarAsistencia() {
-// Guardar todos primero
-for (const emp of empleados) {
-await guardarAsistencia(emp.id);
-}
-// Marcar todas como enviadas
-const ids = empleados.map(e => asistencias[e.id]?.id).filter(Boolean);
-if (ids.length) {
-await db.from('asistencia_semanal').update({ enviada: true }).in('id', ids);
-}
-yaEnviada = true;
-closeOv('overlay-confirm');
-showToast('Asistencia enviada ✓');
-renderApp();
+  for (const emp of empleados) {
+    await guardarAsistencia(emp.id);
+  }
+  const ids = empleados.map(e => asistencias[e.id]?.id).filter(Boolean);
+  if (ids.length) {
+    await db.from('asistencia_semanal').update({ enviada: true }).in('id', ids);
+  }
+  yaEnviada = true;
+  closeOv('overlay-confirm');
+  showToast('Asistencia enviada ✓');
+  renderApp();
 }
 
 // ─── NUEVO EMPLEADO ───────────────────────────────────────────────────────────
 function openNuevoEmp() {
-['ef-nombre','ef-puesto','ef-salario','ef-diario'].forEach(id => $(id).value = '');
-$('overlay-emp').classList.add('open');
+  ['ef-nombre','ef-puesto','ef-salario','ef-diario'].forEach(id => $(id).value = '');
+  $('overlay-emp').classList.add('open');
 }
 
 async function guardarNuevoEmp() {
-const nombre = $('ef-nombre').value.trim().toUpperCase();
-const puesto = $('ef-puesto').value.trim();
-const salario = +$('ef-salario').value || 0;
-if (!nombre) { alert('El nombre es obligatorio.'); return; }
+  const nombre = $('ef-nombre').value.trim().toUpperCase();
+  const puesto = $('ef-puesto').value.trim();
+  const salario = +$('ef-salario').value || 0;
+  if (!nombre) { alert('El nombre es obligatorio.'); return; }
 
-const { data } = await db.from('empleados_nomina')
-.insert([{ nombre, puesto, obra: encargado.obra, salario, gasolina: 0, activo: true }])
-.select().single();
+  const { data } = await db.from('empleados_nomina')
+    .insert([{ nombre, puesto, obra: encargado.obra, salario, gasolina: 0, activo: true }])
+    .select().single();
 
-if (data) {
-empleados.push(data);
-closeOv('overlay-emp');
-showToast(nombre + ' agregado');
-renderApp();
+  if (data) {
+    empleados.push(data);
+    closeOv('overlay-emp');
+    showToast(nombre + ' agregado');
+    renderApp();
+  }
 }
-}
 
-// ─── PESTAÑAS ENCARGADO ───────────────────────────────────────────────────────
+// ─── PESTAÑAS ─────────────────────────────────────────────────────────────────
 function swEnc(t) {
-['semana','historial'].forEach(n => {
-$('enc-'+n).style.display = n===t ? 'block' : 'none';
-const tabEl = $('tenc-'+n);
-if (tabEl) {
-tabEl.style.color = n===t ? 'var(--text)' : 'var(--text2)';
-tabEl.style.borderBottomColor = n===t ? 'var(--text)' : 'transparent';
-tabEl.style.fontWeight = n===t ? '500' : 'normal';
-}
-});
-if (t==='historial') renderHistorialEnc();
+  ['semana','historial'].forEach(n => {
+    $('enc-'+n).style.display = n===t ? 'block' : 'none';
+    const tabEl = $('tenc-'+n);
+    if (tabEl) {
+      tabEl.style.color = n===t ? 'var(--text)' : 'var(--text2)';
+      tabEl.style.borderBottomColor = n===t ? 'var(--text)' : 'transparent';
+      tabEl.style.fontWeight = n===t ? '500' : 'normal';
+    }
+  });
+  if (t==='historial') renderHistorialEnc();
 }
 
 async function renderHistorialEnc() {
-const { data: semsEnc } = await db.from('asistencia_semanal')
-.select('*, semanas_nomina(desde, hasta)')
-.eq('encargado_id', encargado.id)
-.eq('enviada', true)
-.order('created_at', {ascending: false});
+  const { data: semsEnc } = await db.from('asistencia_semanal')
+    .select('*, semanas_nomina(desde, hasta)')
+    .eq('encargado_id', encargado.id)
+    .eq('enviada', true)
+    .order('created_at', {ascending: false});
 
-// Agrupar por semana
-const semMap = {};
-(semsEnc||[]).forEach(row => {
-const sid = row.semana_id;
-if (!semMap[sid]) semMap[sid] = { rows:[], desde: row.semanas_nomina?.desde, hasta: row.semanas_nomina?.hasta };
-semMap[sid].rows.push(row);
-});
+  const semMap = {};
+  (semsEnc||[]).forEach(row => {
+    const sid = row.semana_id;
+    if (!semMap[sid]) semMap[sid] = { rows:[], desde: row.semanas_nomina?.desde, hasta: row.semanas_nomina?.hasta };
+    semMap[sid].rows.push(row);
+  });
 
-$('hist-enc-tbody').innerHTML = Object.entries(semMap).length
-? Object.entries(semMap).map(([sid, s], i) => {
-const totalFaltas = s.rows.reduce((sum,r)=>sum+(r.total_faltas||0),0);
-const totalDesc = s.rows.reduce((sum,r)=>sum+(r.descuento_retardo||0),0);
-return `<tr>
-         <td style="font-weight:500">Semana #${Object.keys(semMap).length-i}</td>
-         <td>${s.desde||'—'}</td><td>${s.hasta||'—'}</td>
-         <td class="num">${s.rows.length}</td>
-         <td class="num" style="color:${totalFaltas>0?'var(--red)':'var(--text2)'}">${totalFaltas>0?totalFaltas:'—'}</td>
-         <td class="num" style="color:${totalDesc>0?'var(--amber)':'var(--text2)'}">${totalDesc>0?'$'+Math.round(totalDesc).toLocaleString('es-MX'):'—'}</td>
-         <td><button class="btn btn-sm" onclick="verDetalleEnc(${JSON.stringify(s).replace(/"/g,"'")})">Ver</button></td>
-       </tr>`;
-}).join('')
-: `<tr><td colspan="7" class="empty">Aún no has enviado semanas</td></tr>`;
+  const entries = Object.entries(semMap);
+  $('hist-enc-tbody').innerHTML = entries.length
+    ? entries.map(([sid, s], i) => {
+        const totalFaltas = s.rows.reduce((sum,r)=>sum+(r.total_faltas||0),0);
+        const totalDesc = s.rows.reduce((sum,r)=>sum+(r.descuento_retardo||0),0);
+        return `<tr>
+          <td style="font-weight:500">Semana #${entries.length-i}</td>
+          <td>${s.desde||'—'}</td><td>${s.hasta||'—'}</td>
+          <td class="num">${s.rows.length}</td>
+          <td class="num" style="color:${totalFaltas>0?'var(--red)':'var(--text2)'}">${totalFaltas>0?totalFaltas:'—'}</td>
+          <td class="num" style="color:${totalDesc>0?'var(--amber)':'var(--text2)'}">${totalDesc>0?'$'+Math.round(totalDesc).toLocaleString('es-MX'):'—'}</td>
+          <td><button class="btn btn-sm" onclick='verDetalleEnc(${JSON.stringify(s)})'>Ver</button></td>
+        </tr>`;
+      }).join('')
+    : `<tr><td colspan="7" class="empty">Aún no has enviado semanas</td></tr>`;
 }
 
 function verDetalleEnc(s) {
-const DIAS_LABEL = ['Lun','Mar','Mié','Jue','Vie','Sáb'];
-const DIAS = ['lunes','martes','miercoles','jueves','viernes','sabado'];
-$('hist-enc-detail-title').textContent = `Semana ${s.desde||''} — ${s.hasta||''}`;
-$('hist-enc-detail-tbody').innerHTML = s.rows.map(row => {
-const emp = empleados.find(e=>e.id===row.empleado_id);
-const celdas = DIAS.map(dia => {
-const est = row[dia]||'ok';
-const color = est==='ok'?'var(--green)':est==='falta'?'var(--red)':'var(--amber)';
-const lbl = est==='ok'?'✓':est==='falta'?'✗':'↻';
-return `<td style="text-align:center;color:${color};font-weight:500">${lbl}${est==='retardo'&&row[dia+'_hora']?`<br><span style="font-size:9px">${row[dia+'_hora']}</span>`:''}`;
-}).join('');
-return `<tr><td style="font-weight:500">${emp?emp.nombre:'?'}</td>${celdas}<td class="num" style="color:${(row.total_faltas||0)>0?'var(--red)':'var(--text2)'}">${row.total_faltas||'—'}</td><td class="num" style="color:var(--amber)">${row.descuento_retardo>0?'$'+Math.round(row.descuento_retardo).toLocaleString('es-MX'):'—'}</td><td style="font-size:11px;color:var(--text2)">${row.nota||'—'}</td></tr>`;
-}).join('');
-$('hist-enc-detail').style.display = 'block';
+  $('hist-enc-detail-title').textContent = `Semana ${s.desde||''} — ${s.hasta||''}`;
+  $('hist-enc-detail-tbody').innerHTML = s.rows.map(row => {
+    const emp = empleados.find(e=>e.id===row.empleado_id);
+    const celdas = DIAS.map(dia => {
+      const est = row[dia]||'ok';
+      const color = est==='ok'?'var(--green)':est==='falta'?'var(--red)':'var(--amber)';
+      const lbl = est==='ok'?'✓':est==='falta'?'✗':'↻';
+      return `<td style="text-align:center;color:${color};font-weight:500">${lbl}${est==='retardo'&&row[dia+'_hora']?`<br><span style="font-size:9px">${row[dia+'_hora']}</span>`:''}</td>`;
+    }).join('');
+    return `<tr>
+      <td style="font-weight:500">${emp?emp.nombre:'?'}</td>
+      ${celdas}
+      <td class="num" style="color:${(row.total_faltas||0)>0?'var(--red)':'var(--text2)'}">${row.total_faltas||'—'}</td>
+      <td class="num" style="color:var(--amber)">${row.descuento_retardo>0?'$'+Math.round(row.descuento_retardo).toLocaleString('es-MX'):'—'}</td>
+      <td style="font-size:11px;color:var(--text2)">${row.nota||'—'}</td>
+    </tr>`;
+  }).join('');
+  $('hist-enc-detail').style.display = 'block';
 }
 
 // ─── ARRANQUE ─────────────────────────────────────────────────────────────────
 (async () => {
-const { data: { session } } = await db.auth.getSession();
-if (session) {
-const { data: enc } = await db.from('encargados_obra')
-.select('*').eq('email', session.user.email).eq('activo', true).single();
-if (enc) { encargado = enc; mostrarApp(); return; }
-}
-db.auth.onAuthStateChange((event, session) => {
-if (event === 'SIGNED_OUT') location.reload();
-});
+  const { data: { session } } = await db.auth.getSession();
+  if (session) {
+    const { data: enc } = await db.from('encargados_obra')
+      .select('*').eq('email', session.user.email).eq('activo', true).single();
+    if (enc) { encargado = enc; mostrarApp(); return; }
+  }
+  db.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT') location.reload();
+  });
 })();
 </script>
 </body>
