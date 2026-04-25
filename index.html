@@ -315,6 +315,7 @@ let asistencias = {};
 let yaEnviada = false;
 let diasBloqueados = [];
 let currentLunes, currentSabado;
+let histSemMap = {};
 
 // ─── LOGIN ────────────────────────────────────────────────────────────────────
 async function doLogin() {
@@ -395,9 +396,9 @@ function calcDescRetardo(hora, salarioDiario) {
 
   if (totalMin <= tolerancia) return { minutos: 0, descuento: 0 };
 
-  const minRetraso = totalMin - entrada;
+  const minRetraso = totalMin - tolerancia;
   const salarioHora = salarioDiario / 8;
-  // Proporcional exacto: cada minuto se descuenta
+  // Proporcional exacto: cada minuto desde la tolerancia se descuenta
   return { minutos: minRetraso, descuento: salarioHora * (minRetraso / 60), esHora: false };
 }
 
@@ -611,6 +612,8 @@ function confirmarEnvioParcial() {
 
 async function enviarParcial() {
   const DIAS_PARCIAL = ['lunes','martes','miercoles'];
+  const btn = $('confirm-btn');
+  btn.disabled = true; btn.textContent = 'Guardando...';
   for (const emp of empleados) {
     await guardarAsistencia(emp.id);
   }
@@ -649,6 +652,8 @@ function confirmarEnvio() {
 }
 
 async function enviarAsistencia() {
+  const btn = $('confirm-btn');
+  btn.disabled = true; btn.textContent = 'Guardando...';
   for (const emp of empleados) {
     await guardarAsistencia(emp.id);
   }
@@ -707,31 +712,33 @@ async function renderHistorialEnc() {
     .eq('enviada', true)
     .order('created_at', {ascending: false});
 
-  const semMap = {};
+  histSemMap = {};
   (semsEnc||[]).forEach(row => {
     const sid = row.semana_id;
-    if (!semMap[sid]) semMap[sid] = { rows:[], desde: row.semanas_nomina?.desde, hasta: row.semanas_nomina?.hasta };
-    semMap[sid].rows.push(row);
+    if (!histSemMap[sid]) histSemMap[sid] = { rows:[], desde: row.semanas_nomina?.desde, hasta: row.semanas_nomina?.hasta };
+    histSemMap[sid].rows.push(row);
   });
+  const semMap = histSemMap;
 
-  const entries = Object.entries(semMap);
+  const entries = Object.entries(semMap).sort((a,b) => (b[1].desde||'').localeCompare(a[1].desde||''));
   $('hist-enc-tbody').innerHTML = entries.length
     ? entries.map(([sid, s], i) => {
         const totalFaltas = s.rows.reduce((sum,r)=>sum+(r.total_faltas||0),0);
         const totalDesc = s.rows.reduce((sum,r)=>sum+(r.descuento_retardo||0),0);
         return `<tr>
           <td style="font-weight:500">Semana #${entries.length-i}</td>
-          <td>${s.desde||'—'}</td><td>${s.hasta||'—'}</td>
+          <td>${s.desde ? fmtD(fromISO(s.desde)) : '—'}</td><td>${s.hasta ? fmtD(fromISO(s.hasta)) : '—'}</td>
           <td class="num">${s.rows.length}</td>
           <td class="num" style="color:${totalFaltas>0?'var(--red)':'var(--text2)'}">${totalFaltas>0?totalFaltas:'—'}</td>
           <td class="num" style="color:${totalDesc>0?'var(--amber)':'var(--text2)'}">${totalDesc>0?'$'+Math.round(totalDesc).toLocaleString('es-MX'):'—'}</td>
-          <td><button class="btn btn-sm" onclick='verDetalleEnc(${JSON.stringify(s)})'>Ver</button></td>
+          <td><button class="btn btn-sm" onclick="verDetalleEnc('${sid}')">Ver</button></td>
         </tr>`;
       }).join('')
     : `<tr><td colspan="7" class="empty">Aún no has enviado semanas</td></tr>`;
 }
 
-function verDetalleEnc(s) {
+function verDetalleEnc(sid) {
+  const s = histSemMap[sid]; if (!s) return;
   $('hist-enc-detail-title').textContent = `Semana ${s.desde||''} — ${s.hasta||''}`;
   $('hist-enc-detail-tbody').innerHTML = s.rows.map(row => {
     const emp = empleados.find(e=>e.id===row.empleado_id);
